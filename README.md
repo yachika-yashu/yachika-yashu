@@ -22,7 +22,7 @@ A commitment to continuous learning—I’m always exploring new tools, techniqu
 
 
 🧩 My Approach
-I thrive on solving puzzles—whether it’s optimizing a dataset, uncovering hidden trends, or fine-tuning an ML model. My focus and adaptability allow me to quickly grasp new concepts and apply them effectively.
+I thrive on solving puzzles, finding hidden patterns—whether it’s optimizing a dataset, uncovering hidden trends, or fine-tuning an ML model. My focus and adaptability allow me to quickly grasp new concepts and apply them effectively.
 
 This space is a reflection of my passion for data, learning, and innovation. Let’s dive in! 🚀
 
