@@ -1,6 +1,4 @@
-                                                         # Welcome to My Data Science & Analytics Portfolio 🚀
-                                                        
-
+# Welcome to My Data Science & Analytics Portfolio 🚀
 Hi, I’m Yachika! I approach data with precision, curiosity, and a problem-solving mindset. Each project in this repository reflects my ability to break down complex datasets, extract meaningful insights, and present them with clarity.
 
 🔍 What You’ll Find Here
