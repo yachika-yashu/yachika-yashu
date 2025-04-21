@@ -1,0 +1,1613 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/yachika-yashu/yachika-yashu/blob/main/EDA%20using%20PySpark/Stats_Canada_Employment_EDA\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yachika-yashu/yachika-yashu/blob/main/EDA%20using%20PySpark/Stats_Canada_Employment_EDA)\n"
+      ],
+      "metadata": {
+        "id": "jhAaThAGfwl4"
+      },
+      "id": "jhAaThAGfwl4"
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "39K74XkJfwC0"
+      },
+      "id": "39K74XkJfwC0",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pyspark\n",
+        "from pyspark.sql.functions import * #This line imports all functions from the pyspark.sql.functions module eq avg, agg\n",
+        "from pyspark.sql.types import * #This line imports all classes from the pyspark.sql.types module. This module defines data types that are used within PySpark dataframes"
+      ],
+      "metadata": {
+        "id": "5w98-YKTotEe"
+      },
+      "id": "5w98-YKTotEe",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#import required libraries\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt\n",
+        "import seaborn as sns\n",
+        "from pyspark.sql.window import Window\n",
+        "from pyspark.sql.functions import lag, col"
+      ],
+      "metadata": {
+        "id": "2E9QHcF4MTbj"
+      },
+      "id": "2E9QHcF4MTbj",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "pyspark.__version__"
+      ],
+      "metadata": {
+        "id": "ZE-E5oqSs3-o",
+        "outputId": "f3c3b5ac-c403-4403-80ce-c5a24cf9ea14",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 36
+        }
+      },
+      "id": "ZE-E5oqSs3-o",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'3.5.5'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 3
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Step 1: Creating a SparkSession**\n",
+        "A SparkSession is an entry point into all functionality in Spark, and is required if you want to build a dataframe in PySpark.\n",
+        "\n",
+        "spark = SparkSession.builder.appName(\"Pyspark ETL project\").config(\"spark.memory.offHeap.enabled\",\"true\").config(\"spark.memory.offHeap.size\",\"10g\").getOrCreate()\n",
+        "Sure! Here's a concise and informative explanation:\n",
+        "\n",
+        "SparkSession Configuration Breakdown\n",
+        "  1. **SparkSession.builder**: Initializes the builder for creating a SparkSession.\n",
+        "  2. **.appName(\"Pyspark ETL project\")**: Sets the name of the Spark application.\n",
+        "  3. **.config(\"spark.memory.offHeap.enabled\", \"true\")**: Enables off-heap memory to reduce JVM garbage collection overhead and improve performance for memory-intensive applications.\n",
+        "  4. **.config(\"spark.memory.offHeap.size\", \"10g\")**: Allocates 10 gigabytes of off-heap memory.\n",
+        "  5. **.getOrCreate()**: Creates a new SparkSession if none exists, or retrieves the existing one.\n",
+        "\n",
+        "PySpark interacts with Spark’s core, which runs on the JVM (Java Virtual Machine) and is primarily written in Scala. When a SparkSession is created, it initializes the JVM environment for executing Spark operations. The JVM manages heap memory and performs garbage collection, which reclaims unused memory but can cause performance bottlenecks. To reduce this overhead, Spark supports off-heap memory—memory managed outside the JVM heap—minimizing garbage collection pauses and boosting performance. Off-heap memory can be enabled via configuration settings during SparkSession initialization, making Spark applications more memory-efficient."
+      ],
+      "metadata": {
+        "id": "rkMvOyTvwBLH"
+      },
+      "id": "rkMvOyTvwBLH"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark.sql import SparkSession"
+      ],
+      "metadata": {
+        "id": "1m1XNn6R1oK1"
+      },
+      "id": "1m1XNn6R1oK1",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "spark = SparkSession.builder.appName(\"Pyspark ETL project\").config(\"spark.memory.offHeap.enabled\",\"true\").config(\"spark.memory.offHeap.size\",\"10g\").getOrCreate()\n"
+      ],
+      "metadata": {
+        "id": "K5QYRC5dwAjh"
+      },
+      "id": "K5QYRC5dwAjh",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "spark"
+      ],
+      "metadata": {
+        "id": "Am65ELKwwAgH",
+        "outputId": "44d3a5f0-9d29-4e57-d5df-2cfee086b4fe",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 222
+        }
+      },
+      "id": "Am65ELKwwAgH",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "<pyspark.sql.session.SparkSession at 0x7ca8a96e3d90>"
+            ],
+            "text/html": [
+              "\n",
+              "            <div>\n",
+              "                <p><b>SparkSession - in-memory</b></p>\n",
+              "                \n",
+              "        <div>\n",
+              "            <p><b>SparkContext</b></p>\n",
+              "\n",
+              "            <p><a href=\"http://7e1ad432faa8:4040\">Spark UI</a></p>\n",
+              "\n",
+              "            <dl>\n",
+              "              <dt>Version</dt>\n",
+              "                <dd><code>v3.5.5</code></dd>\n",
+              "              <dt>Master</dt>\n",
+              "                <dd><code>local[*]</code></dd>\n",
+              "              <dt>AppName</dt>\n",
+              "                <dd><code>Pyspark ETL project</code></dd>\n",
+              "            </dl>\n",
+              "        </div>\n",
+              "        \n",
+              "            </div>\n",
+              "        "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 7
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df = spark.read.csv('statsdata.csv',header=True)"
+      ],
+      "metadata": {
+        "id": "rC0ZRObowAc7"
+      },
+      "id": "rC0ZRObowAc7",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#df.show()\n",
+        "df.show(5,0) #same as df.head(5)"
+      ],
+      "metadata": {
+        "id": "-oCBVs_XwAZ7",
+        "outputId": "a80e8839-49ff-42de-d64b-29ff96e92246",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "-oCBVs_XwAZ7",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+------+--------------+----------------------------+--------------+-----------------+--------------------+------+-------------+---------+--------+----------+-------+------+------+----------+--------+\n",
+            "|REF_DATE|GEO   |DGUID         |Labour force characteristics|Gender        |Age group        |UOM                 |UOM_ID|SCALAR_FACTOR|SCALAR_ID|VECTOR  |COORDINATE|VALUE  |STATUS|SYMBOL|TERMINATED|DECIMALS|\n",
+            "+--------+------+--------------+----------------------------+--------------+-----------------+--------------------+------+-------------+---------+--------+----------+-------+------+------+----------+--------+\n",
+            "|2024-11 |Canada|2021A000011124|Employment                  |Total - Gender|15 years and over|Persons in thousands|428   |thousands    |3        |v2091072|1.3.1.1   |20828.6|NULL  |NULL  |NULL      |1       |\n",
+            "|2024-12 |Canada|2021A000011124|Employment                  |Total - Gender|15 years and over|Persons in thousands|428   |thousands    |3        |v2091072|1.3.1.1   |20843.6|NULL  |NULL  |NULL      |1       |\n",
+            "|2025-01 |Canada|2021A000011124|Employment                  |Total - Gender|15 years and over|Persons in thousands|428   |thousands    |3        |v2091072|1.3.1.1   |20670.1|NULL  |NULL  |NULL      |1       |\n",
+            "|2025-02 |Canada|2021A000011124|Employment                  |Total - Gender|15 years and over|Persons in thousands|428   |thousands    |3        |v2091072|1.3.1.1   |20768.6|NULL  |NULL  |NULL      |1       |\n",
+            "|2025-03 |Canada|2021A000011124|Employment                  |Total - Gender|15 years and over|Persons in thousands|428   |thousands    |3        |v2091072|1.3.1.1   |20758.0|NULL  |NULL  |NULL      |1       |\n",
+            "+--------+------+--------------+----------------------------+--------------+-----------------+--------------------+------+-------------+---------+--------+----------+-------+------+------+----------+--------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Step 2:  Data Wrangling / Data Preprocessing**\n",
+        "\n",
+        "\n",
+        "2.1 Inspecting Data inclues Viewing column names, data types, and summary statistics."
+      ],
+      "metadata": {
+        "id": "4ja-T2JhBYKx"
+      },
+      "id": "4ja-T2JhBYKx"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "type(df)"
+      ],
+      "metadata": {
+        "id": "kouYwc8zwAWj",
+        "outputId": "2e589718-402c-4857-c5cf-c7f91ccd219f",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 186
+        }
+      },
+      "id": "kouYwc8zwAWj",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "pyspark.sql.dataframe.DataFrame"
+            ],
+            "text/html": [
+              "<div style=\"max-width:800px; border: 1px solid var(--colab-border-color);\"><style>\n",
+              "      pre.function-repr-contents {\n",
+              "        overflow-x: auto;\n",
+              "        padding: 8px 12px;\n",
+              "        max-height: 500px;\n",
+              "      }\n",
+              "\n",
+              "      pre.function-repr-contents.function-repr-contents-collapsed {\n",
+              "        cursor: pointer;\n",
+              "        max-height: 100px;\n",
+              "      }\n",
+              "    </style>\n",
+              "    <pre style=\"white-space: initial; background:\n",
+              "         var(--colab-secondary-surface-color); padding: 8px 12px;\n",
+              "         border-bottom: 1px solid var(--colab-border-color);\"><b>pyspark.sql.dataframe.DataFrame</b><br/>def __init__(jdf: JavaObject, sql_ctx: Union[&#x27;SQLContext&#x27;, &#x27;SparkSession&#x27;])</pre><pre class=\"function-repr-contents function-repr-contents-collapsed\" style=\"\"><a class=\"filepath\" style=\"display:none\" href=\"#\">/usr/local/lib/python3.11/dist-packages/pyspark/sql/dataframe.py</a>A distributed collection of data grouped into named columns.\n",
+              "\n",
+              ".. versionadded:: 1.3.0\n",
+              "\n",
+              ".. versionchanged:: 3.4.0\n",
+              "    Supports Spark Connect.\n",
+              "\n",
+              "Examples\n",
+              "--------\n",
+              "A :class:`DataFrame` is equivalent to a relational table in Spark SQL,\n",
+              "and can be created using various functions in :class:`SparkSession`:\n",
+              "\n",
+              "&gt;&gt;&gt; people = spark.createDataFrame([\n",
+              "...     {&quot;deptId&quot;: 1, &quot;age&quot;: 40, &quot;name&quot;: &quot;Hyukjin Kwon&quot;, &quot;gender&quot;: &quot;M&quot;, &quot;salary&quot;: 50},\n",
+              "...     {&quot;deptId&quot;: 1, &quot;age&quot;: 50, &quot;name&quot;: &quot;Takuya Ueshin&quot;, &quot;gender&quot;: &quot;M&quot;, &quot;salary&quot;: 100},\n",
+              "...     {&quot;deptId&quot;: 2, &quot;age&quot;: 60, &quot;name&quot;: &quot;Xinrong Meng&quot;, &quot;gender&quot;: &quot;F&quot;, &quot;salary&quot;: 150},\n",
+              "...     {&quot;deptId&quot;: 3, &quot;age&quot;: 20, &quot;name&quot;: &quot;Haejoon Lee&quot;, &quot;gender&quot;: &quot;M&quot;, &quot;salary&quot;: 200}\n",
+              "... ])\n",
+              "\n",
+              "Once created, it can be manipulated using the various domain-specific-language\n",
+              "(DSL) functions defined in: :class:`DataFrame`, :class:`Column`.\n",
+              "\n",
+              "To select a column from the :class:`DataFrame`, use the apply method:\n",
+              "\n",
+              "&gt;&gt;&gt; age_col = people.age\n",
+              "\n",
+              "A more concrete example:\n",
+              "\n",
+              "&gt;&gt;&gt; # To create DataFrame using SparkSession\n",
+              "... department = spark.createDataFrame([\n",
+              "...     {&quot;id&quot;: 1, &quot;name&quot;: &quot;PySpark&quot;},\n",
+              "...     {&quot;id&quot;: 2, &quot;name&quot;: &quot;ML&quot;},\n",
+              "...     {&quot;id&quot;: 3, &quot;name&quot;: &quot;Spark SQL&quot;}\n",
+              "... ])\n",
+              "\n",
+              "&gt;&gt;&gt; people.filter(people.age &gt; 30).join(\n",
+              "...     department, people.deptId == department.id).groupBy(\n",
+              "...     department.name, &quot;gender&quot;).agg({&quot;salary&quot;: &quot;avg&quot;, &quot;age&quot;: &quot;max&quot;}).show()\n",
+              "+-------+------+-----------+--------+\n",
+              "|   name|gender|avg(salary)|max(age)|\n",
+              "+-------+------+-----------+--------+\n",
+              "|     ML|     F|      150.0|      60|\n",
+              "|PySpark|     M|       75.0|      50|\n",
+              "+-------+------+-----------+--------+\n",
+              "\n",
+              "Notes\n",
+              "-----\n",
+              "A DataFrame should only be created as described above. It should not be directly\n",
+              "created via using the constructor.</pre>\n",
+              "      <script>\n",
+              "      if (google.colab.kernel.accessAllowed && google.colab.files && google.colab.files.view) {\n",
+              "        for (const element of document.querySelectorAll('.filepath')) {\n",
+              "          element.style.display = 'block'\n",
+              "          element.onclick = (event) => {\n",
+              "            event.preventDefault();\n",
+              "            event.stopPropagation();\n",
+              "            google.colab.files.view(element.textContent, 80);\n",
+              "          };\n",
+              "        }\n",
+              "      }\n",
+              "      for (const element of document.querySelectorAll('.function-repr-contents')) {\n",
+              "        element.onclick = (event) => {\n",
+              "          event.preventDefault();\n",
+              "          event.stopPropagation();\n",
+              "          element.classList.toggle('function-repr-contents-collapsed');\n",
+              "        };\n",
+              "      }\n",
+              "      </script>\n",
+              "      </div>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 10
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "### Check the schema\n",
+        "df.printSchema()   #same as df.info() in pandas"
+      ],
+      "metadata": {
+        "id": "j7SW9MzIwAS-",
+        "outputId": "f40ff83b-74cf-48b2-d1ee-ea0750fa7c86",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "j7SW9MzIwAS-",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "root\n",
+            " |-- REF_DATE: string (nullable = true)\n",
+            " |-- GEO: string (nullable = true)\n",
+            " |-- DGUID: string (nullable = true)\n",
+            " |-- Labour force characteristics: string (nullable = true)\n",
+            " |-- Gender: string (nullable = true)\n",
+            " |-- Age group: string (nullable = true)\n",
+            " |-- UOM: string (nullable = true)\n",
+            " |-- UOM_ID: string (nullable = true)\n",
+            " |-- SCALAR_FACTOR: string (nullable = true)\n",
+            " |-- SCALAR_ID: string (nullable = true)\n",
+            " |-- VECTOR: string (nullable = true)\n",
+            " |-- COORDINATE: string (nullable = true)\n",
+            " |-- VALUE: string (nullable = true)\n",
+            " |-- STATUS: string (nullable = true)\n",
+            " |-- SYMBOL: string (nullable = true)\n",
+            " |-- TERMINATED: string (nullable = true)\n",
+            " |-- DECIMALS: string (nullable = true)\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.count()  #no. of rows in the dataframe"
+      ],
+      "metadata": {
+        "id": "4himAD6KwAPu",
+        "outputId": "31c900ad-acb3-4c41-97a1-dc035d848cb5",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "4himAD6KwAPu",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "330"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 12
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.columns  #column names in the dataframe"
+      ],
+      "metadata": {
+        "id": "C9VcD7oO6hIM",
+        "outputId": "dd335a4d-7d4b-4ced-c862-b8cc136c3d8b",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "C9VcD7oO6hIM",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "['REF_DATE',\n",
+              " 'GEO',\n",
+              " 'DGUID',\n",
+              " 'Labour force characteristics',\n",
+              " 'Gender',\n",
+              " 'Age group',\n",
+              " 'UOM',\n",
+              " 'UOM_ID',\n",
+              " 'SCALAR_FACTOR',\n",
+              " 'SCALAR_ID',\n",
+              " 'VECTOR',\n",
+              " 'COORDINATE',\n",
+              " 'VALUE',\n",
+              " 'STATUS',\n",
+              " 'SYMBOL',\n",
+              " 'TERMINATED',\n",
+              " 'DECIMALS']"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 13
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "To view some columns: use Select and show"
+      ],
+      "metadata": {
+        "id": "IehJOKAI3qzn"
+      },
+      "id": "IehJOKAI3qzn"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.select(['REF_DATE','Gender', 'Age group','VALUE',]).show(5)"
+      ],
+      "metadata": {
+        "id": "YPKv3xpP3qf5",
+        "outputId": "5346a4bc-9f0b-4d29-fff5-e6e3ab5e5f69",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "YPKv3xpP3qf5",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+-------+\n",
+            "|REF_DATE|        Gender|        Age group|  VALUE|\n",
+            "+--------+--------------+-----------------+-------+\n",
+            "| 2024-11|Total - Gender|15 years and over|20828.6|\n",
+            "| 2024-12|Total - Gender|15 years and over|20843.6|\n",
+            "| 2025-01|Total - Gender|15 years and over|20670.1|\n",
+            "| 2025-02|Total - Gender|15 years and over|20768.6|\n",
+            "| 2025-03|Total - Gender|15 years and over|20758.0|\n",
+            "+--------+--------------+-----------------+-------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.dtypes #datatype of each column"
+      ],
+      "metadata": {
+        "id": "l8ci_0p_wAIZ",
+        "outputId": "d67da92a-f9c3-429c-b334-2109f81e6021",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "l8ci_0p_wAIZ",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[('REF_DATE', 'string'),\n",
+              " ('GEO', 'string'),\n",
+              " ('DGUID', 'string'),\n",
+              " ('Labour force characteristics', 'string'),\n",
+              " ('Gender', 'string'),\n",
+              " ('Age group', 'string'),\n",
+              " ('UOM', 'string'),\n",
+              " ('UOM_ID', 'string'),\n",
+              " ('SCALAR_FACTOR', 'string'),\n",
+              " ('SCALAR_ID', 'string'),\n",
+              " ('VECTOR', 'string'),\n",
+              " ('COORDINATE', 'string'),\n",
+              " ('VALUE', 'string'),\n",
+              " ('STATUS', 'string'),\n",
+              " ('SYMBOL', 'string'),\n",
+              " ('TERMINATED', 'string'),\n",
+              " ('DECIMALS', 'string')]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 15
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#change value column datatype to integer\n",
+        "df=df.withColumn(\"VALUE\",df.VALUE.cast('float'))"
+      ],
+      "metadata": {
+        "id": "DACSTKmYsJXJ"
+      },
+      "id": "DACSTKmYsJXJ",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#change ref_date column datatype to timestamp\n",
+        "\n",
+        "\n",
+        "df = df.withColumn('REF_DATE_Date', to_date(trim(col('REF_DATE')), 'yyyy-MM'))\n"
+      ],
+      "metadata": {
+        "id": "_jdn5b_wCFpu"
+      },
+      "id": "_jdn5b_wCFpu",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.dtypes #datatype of each column"
+      ],
+      "metadata": {
+        "id": "WB4kWksX0HJx",
+        "outputId": "33d06beb-f1b2-44e1-c6ea-c6970d4dd978",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "WB4kWksX0HJx",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[('REF_DATE', 'string'),\n",
+              " ('GEO', 'string'),\n",
+              " ('DGUID', 'string'),\n",
+              " ('Labour force characteristics', 'string'),\n",
+              " ('Gender', 'string'),\n",
+              " ('Age group', 'string'),\n",
+              " ('UOM', 'string'),\n",
+              " ('UOM_ID', 'string'),\n",
+              " ('SCALAR_FACTOR', 'string'),\n",
+              " ('SCALAR_ID', 'string'),\n",
+              " ('VECTOR', 'string'),\n",
+              " ('COORDINATE', 'string'),\n",
+              " ('VALUE', 'float'),\n",
+              " ('STATUS', 'string'),\n",
+              " ('SYMBOL', 'string'),\n",
+              " ('TERMINATED', 'string'),\n",
+              " ('DECIMALS', 'string'),\n",
+              " ('REF_DATE_Date', 'date')]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 18
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.show()"
+      ],
+      "metadata": {
+        "id": "W6mbxZhy3CoX",
+        "outputId": "d36f66ca-8551-4072-8607-b6319746f572",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "W6mbxZhy3CoX",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+------+--------------+----------------------------+--------------+-----------------+--------------------+------+-------------+---------+--------+----------+-------+------+------+----------+--------+-------------+\n",
+            "|REF_DATE|   GEO|         DGUID|Labour force characteristics|        Gender|        Age group|                 UOM|UOM_ID|SCALAR_FACTOR|SCALAR_ID|  VECTOR|COORDINATE|  VALUE|STATUS|SYMBOL|TERMINATED|DECIMALS|REF_DATE_Date|\n",
+            "+--------+------+--------------+----------------------------+--------------+-----------------+--------------------+------+-------------+---------+--------+----------+-------+------+------+----------+--------+-------------+\n",
+            "| 2024-11|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20828.6|  NULL|  NULL|      NULL|       1|   2024-11-01|\n",
+            "| 2024-12|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20843.6|  NULL|  NULL|      NULL|       1|   2024-12-01|\n",
+            "| 2025-01|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20670.1|  NULL|  NULL|      NULL|       1|   2025-01-01|\n",
+            "| 2025-02|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20768.6|  NULL|  NULL|      NULL|       1|   2025-02-01|\n",
+            "| 2025-03|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20758.0|  NULL|  NULL|      NULL|       1|   2025-03-01|\n",
+            "| 2024-11|Canada|2021A000011124|                  Employment|Total - Gender|   15 to 24 years|Persons in thousands|   428|    thousands|        3|v2091073|   1.3.1.2| 2598.2|  NULL|  NULL|      NULL|       1|   2024-11-01|\n",
+            "| 2024-12|Canada|2021A000011124|                  Employment|Total - Gender|   15 to 24 years|Persons in thousands|   428|    thousands|        3|v2091073|   1.3.1.2| 2615.8|  NULL|  NULL|      NULL|       1|   2024-12-01|\n",
+            "| 2025-01|Canada|2021A000011124|                  Employment|Total - Gender|   15 to 24 years|Persons in thousands|   428|    thousands|        3|v2091073|   1.3.1.2| 2552.3|  NULL|  NULL|      NULL|       1|   2025-01-01|\n",
+            "| 2025-02|Canada|2021A000011124|                  Employment|Total - Gender|   15 to 24 years|Persons in thousands|   428|    thousands|        3|v2091073|   1.3.1.2| 2574.4|  NULL|  NULL|      NULL|       1|   2025-02-01|\n",
+            "| 2025-03|Canada|2021A000011124|                  Employment|Total - Gender|   15 to 24 years|Persons in thousands|   428|    thousands|        3|v2091073|   1.3.1.2| 2575.3|  NULL|  NULL|      NULL|       1|   2025-03-01|\n",
+            "| 2024-11|Canada|2021A000011124|                  Employment|Total - Gender|25 years and over|Persons in thousands|   428|    thousands|        3|v2091074|   1.3.1.3|18230.5|  NULL|  NULL|      NULL|       1|   2024-11-01|\n",
+            "| 2024-12|Canada|2021A000011124|                  Employment|Total - Gender|25 years and over|Persons in thousands|   428|    thousands|        3|v2091074|   1.3.1.3|18227.8|  NULL|  NULL|      NULL|       1|   2024-12-01|\n",
+            "| 2025-01|Canada|2021A000011124|                  Employment|Total - Gender|25 years and over|Persons in thousands|   428|    thousands|        3|v2091074|   1.3.1.3|18117.8|  NULL|  NULL|      NULL|       1|   2025-01-01|\n",
+            "| 2025-02|Canada|2021A000011124|                  Employment|Total - Gender|25 years and over|Persons in thousands|   428|    thousands|        3|v2091074|   1.3.1.3|18194.2|  NULL|  NULL|      NULL|       1|   2025-02-01|\n",
+            "| 2025-03|Canada|2021A000011124|                  Employment|Total - Gender|25 years and over|Persons in thousands|   428|    thousands|        3|v2091074|   1.3.1.3|18182.7|  NULL|  NULL|      NULL|       1|   2025-03-01|\n",
+            "| 2024-11|Canada|2021A000011124|                  Employment|Total - Gender|   25 to 44 years|Persons in thousands|   428|    thousands|        3|v2091075|   1.3.1.4| 9765.7|  NULL|  NULL|      NULL|       1|   2024-11-01|\n",
+            "| 2024-12|Canada|2021A000011124|                  Employment|Total - Gender|   25 to 44 years|Persons in thousands|   428|    thousands|        3|v2091075|   1.3.1.4| 9768.0|  NULL|  NULL|      NULL|       1|   2024-12-01|\n",
+            "| 2025-01|Canada|2021A000011124|                  Employment|Total - Gender|   25 to 44 years|Persons in thousands|   428|    thousands|        3|v2091075|   1.3.1.4| 9699.5|  NULL|  NULL|      NULL|       1|   2025-01-01|\n",
+            "| 2025-02|Canada|2021A000011124|                  Employment|Total - Gender|   25 to 44 years|Persons in thousands|   428|    thousands|        3|v2091075|   1.3.1.4| 9764.6|  NULL|  NULL|      NULL|       1|   2025-02-01|\n",
+            "| 2025-03|Canada|2021A000011124|                  Employment|Total - Gender|   25 to 44 years|Persons in thousands|   428|    thousands|        3|v2091075|   1.3.1.4| 9760.3|  NULL|  NULL|      NULL|       1|   2025-03-01|\n",
+            "+--------+------+--------------+----------------------------+--------------+-----------------+--------------------+------+-------------+---------+--------+----------+-------+------+------+----------+--------+-------------+\n",
+            "only showing top 20 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.describe().show() #summary of all columns"
+      ],
+      "metadata": {
+        "id": "1ZKBU4Z3wAE6",
+        "outputId": "1fabcc69-e8b6-4fc3-8774-9fe0d02fea90",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "1ZKBU4Z3wAE6",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+-------+--------+------+--------------+----------------------------+------+-----------------+--------------------+------+-------------+---------+---------+----------+-----------------+------+------+----------+--------+\n",
+            "|summary|REF_DATE|   GEO|         DGUID|Labour force characteristics|Gender|        Age group|                 UOM|UOM_ID|SCALAR_FACTOR|SCALAR_ID|   VECTOR|COORDINATE|            VALUE|STATUS|SYMBOL|TERMINATED|DECIMALS|\n",
+            "+-------+--------+------+--------------+----------------------------+------+-----------------+--------------------+------+-------------+---------+---------+----------+-----------------+------+------+----------+--------+\n",
+            "|  count|     330|   330|           330|                         330|   330|              330|                 330|   330|          330|      330|      330|       330|              330|     0|     0|         0|     330|\n",
+            "|   mean|    NULL|  NULL|          NULL|                        NULL|  NULL|             NULL|                NULL| 428.0|         NULL|      3.0|     NULL|      NULL|3842.916659407182|  NULL|  NULL|      NULL|     1.0|\n",
+            "| stddev|    NULL|  NULL|          NULL|                        NULL|  NULL|             NULL|                NULL|   0.0|         NULL|      0.0|     NULL|      NULL|4731.591283119073|  NULL|  NULL|      NULL|     0.0|\n",
+            "|    min| 2024-11|Canada|2021A000011124|                  Employment|  Men+|   15 to 19 years|Persons in thousands|   428|    thousands|        3|v19650588|   1.3.1.1|            148.7|  NULL|  NULL|      NULL|       1|\n",
+            "|    max| 2025-03|Canada|2021A000011124|                  Employment|Women+|70 years and over|Persons in thousands|   428|    thousands|        3| v2091512|   1.3.3.9|          20843.6|  NULL|  NULL|      NULL|       1|\n",
+            "+-------+--------+------+--------------+----------------------------+------+-----------------+--------------------+------+-------------+---------+---------+----------+-----------------+------+------+----------+--------+\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "2.2 Transforming Data: Adding, removing, or renaming columns; encoding categorical variables; normalizing data."
+      ],
+      "metadata": {
+        "id": "Sj6UF1OADPf2"
+      },
+      "id": "Sj6UF1OADPf2"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "### Adding Columns in data frame\n",
+        "df=df.withColumn('Employment_Count',df['VALUE']*1000)\n"
+      ],
+      "metadata": {
+        "id": "HgmspmTvv__N"
+      },
+      "id": "HgmspmTvv__N",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.show(5)"
+      ],
+      "metadata": {
+        "id": "pt5vnPBntBkr",
+        "outputId": "ae78b82f-980e-47fc-c2df-7563e5ab72e9",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "pt5vnPBntBkr",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+------+--------------+----------------------------+--------------+-----------------+--------------------+------+-------------+---------+--------+----------+-------+------+------+----------+--------+-------------+----------------+\n",
+            "|REF_DATE|   GEO|         DGUID|Labour force characteristics|        Gender|        Age group|                 UOM|UOM_ID|SCALAR_FACTOR|SCALAR_ID|  VECTOR|COORDINATE|  VALUE|STATUS|SYMBOL|TERMINATED|DECIMALS|REF_DATE_Date|Employment_Count|\n",
+            "+--------+------+--------------+----------------------------+--------------+-----------------+--------------------+------+-------------+---------+--------+----------+-------+------+------+----------+--------+-------------+----------------+\n",
+            "| 2024-11|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20828.6|  NULL|  NULL|      NULL|       1|   2024-11-01|       2.08286E7|\n",
+            "| 2024-12|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20843.6|  NULL|  NULL|      NULL|       1|   2024-12-01|       2.08436E7|\n",
+            "| 2025-01|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20670.1|  NULL|  NULL|      NULL|       1|   2025-01-01|       2.06701E7|\n",
+            "| 2025-02|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20768.6|  NULL|  NULL|      NULL|       1|   2025-02-01|       2.07686E7|\n",
+            "| 2025-03|Canada|2021A000011124|                  Employment|Total - Gender|15 years and over|Persons in thousands|   428|    thousands|        3|v2091072|   1.3.1.1|20758.0|  NULL|  NULL|      NULL|       1|   2025-03-01|        2.0758E7|\n",
+            "+--------+------+--------------+----------------------------+--------------+-----------------+--------------------+------+-------------+---------+--------+----------+-------+------+------+----------+--------+-------------+----------------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "### Drop the columns\n",
+        "df=df.drop(\"GEO\",\"DGUID\",\"UOM\",\"UOM_ID\",\"SCALAR_FACTOR\",\"SCALAR_ID\",\"DECIMALS\",\"Labour force characteristics\")"
+      ],
+      "metadata": {
+        "id": "NunDu9q64yUS"
+      },
+      "id": "NunDu9q64yUS",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.show(5)"
+      ],
+      "metadata": {
+        "id": "Imi6XBAG-L50",
+        "outputId": "8940539d-9a4a-4fb1-d39d-ed5ac637f52a",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "Imi6XBAG-L50",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "|REF_DATE|        Gender|        Age group|  VECTOR|COORDINATE|  VALUE|STATUS|SYMBOL|TERMINATED|REF_DATE_Date|Employment_Count|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "| 2024-11|Total - Gender|15 years and over|v2091072|   1.3.1.1|20828.6|  NULL|  NULL|      NULL|   2024-11-01|       2.08286E7|\n",
+            "| 2024-12|Total - Gender|15 years and over|v2091072|   1.3.1.1|20843.6|  NULL|  NULL|      NULL|   2024-12-01|       2.08436E7|\n",
+            "| 2025-01|Total - Gender|15 years and over|v2091072|   1.3.1.1|20670.1|  NULL|  NULL|      NULL|   2025-01-01|       2.06701E7|\n",
+            "| 2025-02|Total - Gender|15 years and over|v2091072|   1.3.1.1|20768.6|  NULL|  NULL|      NULL|   2025-02-01|       2.07686E7|\n",
+            "| 2025-03|Total - Gender|15 years and over|v2091072|   1.3.1.1|20758.0|  NULL|  NULL|      NULL|   2025-03-01|        2.0758E7|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "### Rename the columns\n",
+        "df.withColumnRenamed('value', \"Employment_Count (in thousands)\" ).show(5)"
+      ],
+      "metadata": {
+        "id": "ahzBAUwl4yKT",
+        "outputId": "757cdb0a-ca2e-495d-f081-dc5808377ba9",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "ahzBAUwl4yKT",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+--------+----------+-------------------------------+------+------+----------+-------------+----------------+\n",
+            "|REF_DATE|        Gender|        Age group|  VECTOR|COORDINATE|Employment_Count (in thousands)|STATUS|SYMBOL|TERMINATED|REF_DATE_Date|Employment_Count|\n",
+            "+--------+--------------+-----------------+--------+----------+-------------------------------+------+------+----------+-------------+----------------+\n",
+            "| 2024-11|Total - Gender|15 years and over|v2091072|   1.3.1.1|                        20828.6|  NULL|  NULL|      NULL|   2024-11-01|       2.08286E7|\n",
+            "| 2024-12|Total - Gender|15 years and over|v2091072|   1.3.1.1|                        20843.6|  NULL|  NULL|      NULL|   2024-12-01|       2.08436E7|\n",
+            "| 2025-01|Total - Gender|15 years and over|v2091072|   1.3.1.1|                        20670.1|  NULL|  NULL|      NULL|   2025-01-01|       2.06701E7|\n",
+            "| 2025-02|Total - Gender|15 years and over|v2091072|   1.3.1.1|                        20768.6|  NULL|  NULL|      NULL|   2025-02-01|       2.07686E7|\n",
+            "| 2025-03|Total - Gender|15 years and over|v2091072|   1.3.1.1|                        20758.0|  NULL|  NULL|      NULL|   2025-03-01|        2.0758E7|\n",
+            "+--------+--------------+-----------------+--------+----------+-------------------------------+------+------+----------+-------------+----------------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "2.3 Cleaning Data: Handling missing values, removing duplicates, and correcting errors."
+      ],
+      "metadata": {
+        "id": "pB8VUpeyCzRg"
+      },
+      "id": "pB8VUpeyCzRg"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#df.na.drop().show()  #whereever it sees null value it will drop that row"
+      ],
+      "metadata": {
+        "id": "p8JHTm7Q4x_-"
+      },
+      "id": "p8JHTm7Q4x_-",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "### any==how\n",
+        "df.na.drop(how=\"all\").show(5) #if all the values of the row are null only then delete , how=\"any\" is the other option which is default as well"
+      ],
+      "metadata": {
+        "id": "JrePAMfuD-eQ",
+        "outputId": "d6640668-d192-485c-8f46-4fca6b33a6a2",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "JrePAMfuD-eQ",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "|REF_DATE|        Gender|        Age group|  VECTOR|COORDINATE|  VALUE|STATUS|SYMBOL|TERMINATED|REF_DATE_Date|Employment_Count|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "| 2024-11|Total - Gender|15 years and over|v2091072|   1.3.1.1|20828.6|  NULL|  NULL|      NULL|   2024-11-01|       2.08286E7|\n",
+            "| 2024-12|Total - Gender|15 years and over|v2091072|   1.3.1.1|20843.6|  NULL|  NULL|      NULL|   2024-12-01|       2.08436E7|\n",
+            "| 2025-01|Total - Gender|15 years and over|v2091072|   1.3.1.1|20670.1|  NULL|  NULL|      NULL|   2025-01-01|       2.06701E7|\n",
+            "| 2025-02|Total - Gender|15 years and over|v2091072|   1.3.1.1|20768.6|  NULL|  NULL|      NULL|   2025-02-01|       2.07686E7|\n",
+            "| 2025-03|Total - Gender|15 years and over|v2091072|   1.3.1.1|20758.0|  NULL|  NULL|      NULL|   2025-03-01|        2.0758E7|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "##threshold\n",
+        "df.na.drop(how=\"any\",thresh=7).show(5)  #keep those rows which have atleast 7 non null values, The thresh parameter in the drop() method specifies the minimum number of non-null values required to keep a row."
+      ],
+      "metadata": {
+        "id": "sIfnUGk4EAFc",
+        "outputId": "3615cf65-926e-498b-ab16-526ef0e212a9",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "id": "sIfnUGk4EAFc",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "|REF_DATE|        Gender|        Age group|  VECTOR|COORDINATE|  VALUE|STATUS|SYMBOL|TERMINATED|REF_DATE_Date|Employment_Count|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "| 2024-11|Total - Gender|15 years and over|v2091072|   1.3.1.1|20828.6|  NULL|  NULL|      NULL|   2024-11-01|       2.08286E7|\n",
+            "| 2024-12|Total - Gender|15 years and over|v2091072|   1.3.1.1|20843.6|  NULL|  NULL|      NULL|   2024-12-01|       2.08436E7|\n",
+            "| 2025-01|Total - Gender|15 years and over|v2091072|   1.3.1.1|20670.1|  NULL|  NULL|      NULL|   2025-01-01|       2.06701E7|\n",
+            "| 2025-02|Total - Gender|15 years and over|v2091072|   1.3.1.1|20768.6|  NULL|  NULL|      NULL|   2025-02-01|       2.07686E7|\n",
+            "| 2025-03|Total - Gender|15 years and over|v2091072|   1.3.1.1|20758.0|  NULL|  NULL|      NULL|   2025-03-01|        2.0758E7|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "##Subset\n",
+        "df.na.drop(how=\"any\",subset=['value']).show(5) # since value column is important, check if contain any null value, if in value column there is null value then delete that row"
+      ],
+      "metadata": {
+        "id": "GZ4SUhcVEBs2",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "cdfe90ae-a9cc-4994-ba8f-a552752fefb6"
+      },
+      "id": "GZ4SUhcVEBs2",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "|REF_DATE|        Gender|        Age group|  VECTOR|COORDINATE|  VALUE|STATUS|SYMBOL|TERMINATED|REF_DATE_Date|Employment_Count|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "| 2024-11|Total - Gender|15 years and over|v2091072|   1.3.1.1|20828.6|  NULL|  NULL|      NULL|   2024-11-01|       2.08286E7|\n",
+            "| 2024-12|Total - Gender|15 years and over|v2091072|   1.3.1.1|20843.6|  NULL|  NULL|      NULL|   2024-12-01|       2.08436E7|\n",
+            "| 2025-01|Total - Gender|15 years and over|v2091072|   1.3.1.1|20670.1|  NULL|  NULL|      NULL|   2025-01-01|       2.06701E7|\n",
+            "| 2025-02|Total - Gender|15 years and over|v2091072|   1.3.1.1|20768.6|  NULL|  NULL|      NULL|   2025-02-01|       2.07686E7|\n",
+            "| 2025-03|Total - Gender|15 years and over|v2091072|   1.3.1.1|20758.0|  NULL|  NULL|      NULL|   2025-03-01|        2.0758E7|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "### Filling the Missing Value\n",
+        "df.na.fill('Missing Values',['status']).show(5)"
+      ],
+      "metadata": {
+        "id": "cC5Mp2tNEEDo",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "842f43e1-91de-42a3-b477-0d0eedff45be"
+      },
+      "id": "cC5Mp2tNEEDo",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+--------+----------+-------+--------------+------+----------+-------------+----------------+\n",
+            "|REF_DATE|        Gender|        Age group|  VECTOR|COORDINATE|  VALUE|        STATUS|SYMBOL|TERMINATED|REF_DATE_Date|Employment_Count|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+--------------+------+----------+-------------+----------------+\n",
+            "| 2024-11|Total - Gender|15 years and over|v2091072|   1.3.1.1|20828.6|Missing Values|  NULL|      NULL|   2024-11-01|       2.08286E7|\n",
+            "| 2024-12|Total - Gender|15 years and over|v2091072|   1.3.1.1|20843.6|Missing Values|  NULL|      NULL|   2024-12-01|       2.08436E7|\n",
+            "| 2025-01|Total - Gender|15 years and over|v2091072|   1.3.1.1|20670.1|Missing Values|  NULL|      NULL|   2025-01-01|       2.06701E7|\n",
+            "| 2025-02|Total - Gender|15 years and over|v2091072|   1.3.1.1|20768.6|Missing Values|  NULL|      NULL|   2025-02-01|       2.07686E7|\n",
+            "| 2025-03|Total - Gender|15 years and over|v2091072|   1.3.1.1|20758.0|Missing Values|  NULL|      NULL|   2025-03-01|        2.0758E7|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+--------------+------+----------+-------------+----------------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from pyspark.ml.feature import Imputer\n",
+        "\n",
+        "imputer = Imputer(\n",
+        "    inputCols=['value','Age group','gender','ref_date'],\n",
+        "    outputCols=[\"{}_imputed\".format(c) for c in ['value','Age group','gender','ref_date']]\n",
+        "    ).setStrategy(\"median\")"
+      ],
+      "metadata": {
+        "id": "C--tZV0g-dxd"
+      },
+      "id": "C--tZV0g-dxd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "The Imputer is used to fill missing values in a DataFrame.\n",
+        "inputCols: Specifies the columns in the DataFrame that contain missing values and need imputation.outputCols: Specifies the names of the new columns that will contain the imputed values. outputcols code dynamically generates the names of the output columns by appending _imputed to each input column name.\n",
+        "setStrategy(\"median\"): Sets the imputation strategy to \"median\". This means that missing values will be filled with the median value of the respective column."
+      ],
+      "metadata": {
+        "id": "kBGvSHOn_cL-"
+      },
+      "id": "kBGvSHOn_cL-"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.show(5)"
+      ],
+      "metadata": {
+        "id": "cAAHHKVq_I-Z",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "52e0f826-404d-4436-8ff7-b0cae652528d"
+      },
+      "id": "cAAHHKVq_I-Z",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "|REF_DATE|        Gender|        Age group|  VECTOR|COORDINATE|  VALUE|STATUS|SYMBOL|TERMINATED|REF_DATE_Date|Employment_Count|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "| 2024-11|Total - Gender|15 years and over|v2091072|   1.3.1.1|20828.6|  NULL|  NULL|      NULL|   2024-11-01|       2.08286E7|\n",
+            "| 2024-12|Total - Gender|15 years and over|v2091072|   1.3.1.1|20843.6|  NULL|  NULL|      NULL|   2024-12-01|       2.08436E7|\n",
+            "| 2025-01|Total - Gender|15 years and over|v2091072|   1.3.1.1|20670.1|  NULL|  NULL|      NULL|   2025-01-01|       2.06701E7|\n",
+            "| 2025-02|Total - Gender|15 years and over|v2091072|   1.3.1.1|20768.6|  NULL|  NULL|      NULL|   2025-02-01|       2.07686E7|\n",
+            "| 2025-03|Total - Gender|15 years and over|v2091072|   1.3.1.1|20758.0|  NULL|  NULL|      NULL|   2025-03-01|        2.0758E7|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+------+------+----------+-------------+----------------+\n",
+            "only showing top 5 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df=df.drop(\"Status\",\"Terminated\",\"symbol\")"
+      ],
+      "metadata": {
+        "id": "Zu4BiQkTcWzt"
+      },
+      "id": "Zu4BiQkTcWzt",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "\n",
+        "**Step 3: Exploratory Data Analysis**"
+      ],
+      "metadata": {
+        "id": "3VP0iH5L5LBu"
+      },
+      "id": "3VP0iH5L5LBu"
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "1. unique age groups are present in the DataFrame?"
+      ],
+      "metadata": {
+        "id": "ehDwbyKMm6HU"
+      },
+      "id": "ehDwbyKMm6HU"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "unique_age_groups_count = df.select(\"Age group\").distinct().count()\n",
+        "unique_age_groups = df.select(\"Age group\").distinct().collect()\n",
+        "print(unique_age_groups_count)\n",
+        "unique_age_groups\n"
+      ],
+      "metadata": {
+        "id": "B4xiKERJ5L6G",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "e714e3c9-9d19-4a15-c992-1c520efc8319"
+      },
+      "id": "B4xiKERJ5L6G",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "22\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[Row(Age group='45 to 49 years'),\n",
+              " Row(Age group='15 to 64 years'),\n",
+              " Row(Age group='15 to 19 years'),\n",
+              " Row(Age group='45 to 64 years'),\n",
+              " Row(Age group='20 to 24 years'),\n",
+              " Row(Age group='55 to 59 years'),\n",
+              " Row(Age group='30 to 34 years'),\n",
+              " Row(Age group='65 to 69 years'),\n",
+              " Row(Age group='15 years and over'),\n",
+              " Row(Age group='25 to 29 years'),\n",
+              " Row(Age group='45 years and over'),\n",
+              " Row(Age group='50 to 54 years'),\n",
+              " Row(Age group='55 years and over'),\n",
+              " Row(Age group='60 to 64 years'),\n",
+              " Row(Age group='65 years and over'),\n",
+              " Row(Age group='15 to 24 years'),\n",
+              " Row(Age group='25 to 54 years'),\n",
+              " Row(Age group='40 to 44 years'),\n",
+              " Row(Age group='25 to 44 years'),\n",
+              " Row(Age group='35 to 39 years'),\n",
+              " Row(Age group='70 years and over'),\n",
+              " Row(Age group='25 years and over')]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 34
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "2. What is the average employment value for each age group?"
+      ],
+      "metadata": {
+        "id": "aumwSpLnnEtX"
+      },
+      "id": "aumwSpLnnEtX"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "avg_employment_age_group = df.groupBy(\"Age group\").agg(avg(\"VALUE\").alias(\"avg_employment_value\"))\n",
+        "avg_employment_age_group.orderBy(desc('age group')).show()\n"
+      ],
+      "metadata": {
+        "id": "Naqpm0sy5MQs",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "594c535e-134f-4d4d-e8e1-594c49f517a9"
+      },
+      "id": "Naqpm0sy5MQs",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+-----------------+--------------------+\n",
+            "|        Age group|avg_employment_value|\n",
+            "+-----------------+--------------------+\n",
+            "|70 years and over|   278.3400014241536|\n",
+            "|65 years and over|   732.8266723632812|\n",
+            "|   65 to 69 years|    454.486669921875|\n",
+            "|   60 to 64 years|   970.7266682942708|\n",
+            "|55 years and over|   2885.979988606771|\n",
+            "|   55 to 59 years|  1182.4533243815104|\n",
+            "|   50 to 54 years|  1345.2333374023438|\n",
+            "|45 years and over|   5626.000048828125|\n",
+            "|   45 to 64 years|   4893.166666666667|\n",
+            "|   45 to 49 years|  1394.7866739908854|\n",
+            "|   40 to 44 years|  1567.0799967447917|\n",
+            "|   35 to 39 years|  1627.5599934895833|\n",
+            "|   30 to 34 years|  1722.7599853515626|\n",
+            "|25 years and over|  12127.073372395833|\n",
+            "|   25 to 54 years|   9241.093326822916|\n",
+            "|   25 to 44 years|   6501.079947916666|\n",
+            "|   25 to 29 years|              1583.7|\n",
+            "|   20 to 24 years|  1189.9599975585938|\n",
+            "|15 years and over|  13849.193229166667|\n",
+            "|   15 to 64 years|    13116.3666015625|\n",
+            "+-----------------+--------------------+\n",
+            "only showing top 20 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "3. What is the average employment rate for each age group, separated by gender"
+      ],
+      "metadata": {
+        "id": "3wbideA4qTzq"
+      },
+      "id": "3wbideA4qTzq"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "avg_employment_age_group = df.groupBy(\"gender\",\"Age group\").agg(avg(\"VALUE\").alias(\"avg_employment_value\"))\n",
+        "avg_employment_age_group.orderBy(\"Age group\").show(50)"
+      ],
+      "metadata": {
+        "id": "VxWN83fGptim",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "3a9c7a6d-74ec-4c2f-a4e5-2de40ab9cfb8"
+      },
+      "id": "VxWN83fGptim",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------------+-----------------+--------------------+\n",
+            "|        gender|        Age group|avg_employment_value|\n",
+            "+--------------+-----------------+--------------------+\n",
+            "|        Women+|   15 to 19 years|  412.93999633789065|\n",
+            "|Total - Gender|   15 to 19 years|   798.2400146484375|\n",
+            "|          Men+|   15 to 19 years|  385.32000122070315|\n",
+            "|Total - Gender|   15 to 24 years|              2583.2|\n",
+            "|          Men+|   15 to 24 years|  1316.8800048828125|\n",
+            "|        Women+|   15 to 24 years|  1266.3199951171875|\n",
+            "|          Men+|   15 to 64 years|     10262.519921875|\n",
+            "|        Women+|   15 to 64 years|     9412.0400390625|\n",
+            "|Total - Gender|   15 to 64 years|      19674.53984375|\n",
+            "|        Women+|15 years and over|     9857.1400390625|\n",
+            "|          Men+|15 years and over|    10916.6599609375|\n",
+            "|Total - Gender|15 years and over|       20773.7796875|\n",
+            "|Total - Gender|   20 to 24 years|  1784.9599853515624|\n",
+            "|        Women+|   20 to 24 years|   853.3599975585937|\n",
+            "|          Men+|   20 to 24 years|    931.560009765625|\n",
+            "|          Men+|   25 to 29 years|  1233.0399658203125|\n",
+            "|Total - Gender|   25 to 29 years|   2375.560009765625|\n",
+            "|        Women+|   25 to 29 years|  1142.5000244140624|\n",
+            "|          Men+|   25 to 44 years|    5131.17998046875|\n",
+            "|Total - Gender|   25 to 44 years|      9751.619921875|\n",
+            "|        Women+|   25 to 44 years|    4620.43994140625|\n",
+            "|          Men+|   25 to 54 years|    7239.92001953125|\n",
+            "|        Women+|   25 to 54 years|      6621.719921875|\n",
+            "|Total - Gender|   25 to 54 years|    13861.6400390625|\n",
+            "|          Men+|25 years and over|              9599.8|\n",
+            "|Total - Gender|25 years and over|             18190.6|\n",
+            "|        Women+|25 years and over|     8590.8201171875|\n",
+            "|          Men+|   30 to 34 years|  1379.4999755859376|\n",
+            "|Total - Gender|   30 to 34 years|   2584.139990234375|\n",
+            "|        Women+|   30 to 34 years|   1204.639990234375|\n",
+            "|Total - Gender|   35 to 39 years|   2441.339990234375|\n",
+            "|          Men+|   35 to 39 years|   1296.939990234375|\n",
+            "|        Women+|   35 to 39 years|              1144.4|\n",
+            "|          Men+|   40 to 44 years|  1221.6999755859374|\n",
+            "|        Women+|   40 to 44 years|  1128.9199951171875|\n",
+            "|Total - Gender|   40 to 44 years|    2350.62001953125|\n",
+            "|Total - Gender|   45 to 49 years|   2092.180029296875|\n",
+            "|        Women+|   45 to 49 years|  1008.4799926757812|\n",
+            "|          Men+|   45 to 49 years|              1083.7|\n",
+            "|Total - Gender|   45 to 64 years|     7339.7599609375|\n",
+            "|          Men+|   45 to 64 years|   3814.460009765625|\n",
+            "|        Women+|   45 to 64 years|   3525.280029296875|\n",
+            "|        Women+|45 years and over|   3970.380029296875|\n",
+            "|          Men+|45 years and over|     4468.6201171875|\n",
+            "|Total - Gender|45 years and over|              8439.0|\n",
+            "|          Men+|   50 to 54 years|              1025.0|\n",
+            "|Total - Gender|   50 to 54 years|  2017.8400146484375|\n",
+            "|        Women+|   50 to 54 years|   992.8599975585937|\n",
+            "|Total - Gender|   55 to 59 years|    1773.67998046875|\n",
+            "|        Women+|   55 to 59 years|   855.1799926757812|\n",
+            "+--------------+-----------------+--------------------+\n",
+            "only showing top 50 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "4. How has employment changed over time for different age groups?"
+      ],
+      "metadata": {
+        "id": "zP68JJucrURk"
+      },
+      "id": "zP68JJucrURk"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Group by REF_DATE and Age group and calculate the sum of employment values\n",
+        "employment_over_time = df.groupBy(\"REF_DATE_date\", \"Age group\").sum(\"VALUE\")\n",
+        "employment_over_time.orderBy(\"REF_DATE_date\",\"Age group\").show()\n"
+      ],
+      "metadata": {
+        "id": "LkKNNklGrY6B",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "460c50bf-e603-47c9-bd2d-3806f2add034"
+      },
+      "id": "LkKNNklGrY6B",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+-------------+-----------------+------------------+\n",
+            "|REF_DATE_date|        Age group|        sum(VALUE)|\n",
+            "+-------------+-----------------+------------------+\n",
+            "|   2024-11-01|   15 to 19 years|            1599.0|\n",
+            "|   2024-11-01|   15 to 24 years|5196.4000244140625|\n",
+            "|   2024-11-01|   15 to 64 years|  39485.3994140625|\n",
+            "|   2024-11-01|15 years and over|  41657.2001953125|\n",
+            "|   2024-11-01|   20 to 24 years|3597.3999633789062|\n",
+            "|   2024-11-01|   25 to 29 years|4790.7999267578125|\n",
+            "|   2024-11-01|   25 to 44 years| 19531.39990234375|\n",
+            "|   2024-11-01|   25 to 54 years| 27765.39990234375|\n",
+            "|   2024-11-01|25 years and over|           36461.0|\n",
+            "|   2024-11-01|   30 to 34 years|5178.7999267578125|\n",
+            "|   2024-11-01|   35 to 39 years|4860.2999267578125|\n",
+            "|   2024-11-01|   40 to 44 years|4701.5999755859375|\n",
+            "|   2024-11-01|   45 to 49 years|4144.2000732421875|\n",
+            "|   2024-11-01|   45 to 64 years|14757.599853515625|\n",
+            "|   2024-11-01|45 years and over|16929.500244140625|\n",
+            "|   2024-11-01|   50 to 54 years| 4089.800048828125|\n",
+            "|   2024-11-01|   55 to 59 years| 3574.199951171875|\n",
+            "|   2024-11-01|55 years and over| 8695.499877929688|\n",
+            "|   2024-11-01|   60 to 64 years|2949.6000366210938|\n",
+            "|   2024-11-01|   65 to 69 years|1357.1000061035156|\n",
+            "+-------------+-----------------+------------------+\n",
+            "only showing top 20 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "\n",
+        "5. What is the trend of employment values for the age group '15 years and over'?\n"
+      ],
+      "metadata": {
+        "id": "z87yQU25D7TY"
+      },
+      "id": "z87yQU25D7TY"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "\n",
+        "employment_15_over = df.filter(df[\"Age group\"] == \"15 years and over\")\n",
+        "employment_15_over.show(30)\n",
+        "\n",
+        "# Convert the Spark DataFrame to a Pandas DataFrame for plotting\n",
+        "\n",
+        "pdf = employment_15_over.select(\"REF_DATE\", \"Gender\", \"VALUE\").toPandas()\n",
+        "\n",
+        "\n",
+        "# Plotting the distribution of employment values\n",
+        "plt.figure()\n",
+        "ax=sns.barplot(x='REF_DATE', y='VALUE', hue='Gender', data=pdf)\n",
+        "\n",
+        "plt.title('Distribution of Employment Values')\n",
+        "plt.xlabel('Date')\n",
+        "plt.ylabel('Employment Value')\n",
+        "plt.xticks(rotation=45)\n",
+        "plt.legend(title='Gender')\n",
+        "plt.tight_layout()\n",
+        "\n",
+        "# Add value labels on top of each bar\n",
+        "for p in ax.patches:\n",
+        "    height = p.get_height()\n",
+        "    ax.text(\n",
+        "        p.get_x() + p.get_width() / 2,  # X: center of bar\n",
+        "        height + 200,                   # Y: slightly above bar\n",
+        "        f'{int(height)}',               # label\n",
+        "        ha='center', va='bottom', fontsize=8\n",
+        "    )\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 852
+        },
+        "id": "oiDblGUbD68o",
+        "outputId": "6abeccb6-fb74-4eef-ab30-b0f9bfe91a4a"
+      },
+      "id": "oiDblGUbD68o",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+--------+----------+-------+-------------+----------------+\n",
+            "|REF_DATE|        Gender|        Age group|  VECTOR|COORDINATE|  VALUE|REF_DATE_Date|Employment_Count|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+-------------+----------------+\n",
+            "| 2024-11|Total - Gender|15 years and over|v2091072|   1.3.1.1|20828.6|   2024-11-01|       2.08286E7|\n",
+            "| 2024-12|Total - Gender|15 years and over|v2091072|   1.3.1.1|20843.6|   2024-12-01|       2.08436E7|\n",
+            "| 2025-01|Total - Gender|15 years and over|v2091072|   1.3.1.1|20670.1|   2025-01-01|       2.06701E7|\n",
+            "| 2025-02|Total - Gender|15 years and over|v2091072|   1.3.1.1|20768.6|   2025-02-01|       2.07686E7|\n",
+            "| 2025-03|Total - Gender|15 years and over|v2091072|   1.3.1.1|20758.0|   2025-03-01|        2.0758E7|\n",
+            "| 2024-11|          Men+|15 years and over|v2091282|   1.3.2.1|10989.4|   2024-11-01|       1.09894E7|\n",
+            "| 2024-12|          Men+|15 years and over|v2091282|   1.3.2.1|10978.2|   2024-12-01|       1.09782E7|\n",
+            "| 2025-01|          Men+|15 years and over|v2091282|   1.3.2.1|10852.1|   2025-01-01|       1.08521E7|\n",
+            "| 2025-02|          Men+|15 years and over|v2091282|   1.3.2.1|10894.8|   2025-02-01|       1.08948E7|\n",
+            "| 2025-03|          Men+|15 years and over|v2091282|   1.3.2.1|10868.8|   2025-03-01|       1.08688E7|\n",
+            "| 2024-11|        Women+|15 years and over|v2091492|   1.3.3.1| 9839.2|   2024-11-01|       9839200.0|\n",
+            "| 2024-12|        Women+|15 years and over|v2091492|   1.3.3.1| 9865.5|   2024-12-01|       9865500.0|\n",
+            "| 2025-01|        Women+|15 years and over|v2091492|   1.3.3.1| 9818.0|   2025-01-01|       9818000.0|\n",
+            "| 2025-02|        Women+|15 years and over|v2091492|   1.3.3.1| 9873.8|   2025-02-01|       9873800.0|\n",
+            "| 2025-03|        Women+|15 years and over|v2091492|   1.3.3.1| 9889.2|   2025-03-01|       9889200.0|\n",
+            "+--------+--------------+-----------------+--------+----------+-------+-------------+----------------+\n",
+            "\n"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 640x480 with 1 Axes>"
+            ],
+            "image/png": "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\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "6. What is the employment value for the age group '25 to 44 years' over the months?"
+      ],
+      "metadata": {
+        "id": "TTVFOV_FDiei"
+      },
+      "id": "TTVFOV_FDiei"
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "employment_25_44 = df.filter(df[\"Age group\"] == \"25 to 44 years\").groupBy(\"REF_DATE\").sum(\"VALUE\")\n",
+        "employment_25_44.show()\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "seTX0IE3DjvD",
+        "outputId": "166e2f03-e71a-4e94-ec66-95fad4b41693"
+      },
+      "id": "seTX0IE3DjvD",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+-----------------+\n",
+            "|REF_DATE|       sum(VALUE)|\n",
+            "+--------+-----------------+\n",
+            "| 2025-01|          19399.0|\n",
+            "| 2024-12|          19536.0|\n",
+            "| 2024-11|19531.39990234375|\n",
+            "| 2025-02|19529.19970703125|\n",
+            "| 2025-03|  19520.599609375|\n",
+            "+--------+-----------------+\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "7. Are there any significant changes in employment values between consecutive months?"
+      ],
+      "metadata": {
+        "id": "LoiaWg6bGk0K"
+      },
+      "id": "LoiaWg6bGk0K",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "# Calculate the difference in employment values between consecutive months\n",
+        "window_spec = Window.orderBy(\"REF_DATE\")\n",
+        "df_with_lag = df.withColumn(\"prev_value\", lag(\"VALUE\").over(window_spec))\n",
+        "df_with_diff = df_with_lag.withColumn(\"diff\", col(\"VALUE\") - col(\"prev_value\"))\n",
+        "df_with_diff.show()\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "CkU1PiJ_Egmh",
+        "outputId": "110c7aa3-ad29-4524-986b-c05e9a892b76"
+      },
+      "id": "CkU1PiJ_Egmh",
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "+--------+--------------+-----------------+---------+----------+-------+-------------+----------------+----------+----------+\n",
+            "|REF_DATE|        Gender|        Age group|   VECTOR|COORDINATE|  VALUE|REF_DATE_Date|Employment_Count|prev_value|      diff|\n",
+            "+--------+--------------+-----------------+---------+----------+-------+-------------+----------------+----------+----------+\n",
+            "| 2024-11|Total - Gender|15 years and over| v2091072|   1.3.1.1|20828.6|   2024-11-01|       2.08286E7|      NULL|      NULL|\n",
+            "| 2024-11|Total - Gender|   15 to 24 years| v2091073|   1.3.1.2| 2598.2|   2024-11-01|       2598200.0|   20828.6|  -18230.4|\n",
+            "| 2024-11|Total - Gender|25 years and over| v2091074|   1.3.1.3|18230.5|   2024-11-01|       1.82305E7|    2598.2|   15632.3|\n",
+            "| 2024-11|Total - Gender|   25 to 44 years| v2091075|   1.3.1.4| 9765.7|   2024-11-01|       9765700.0|   18230.5|   -8464.8|\n",
+            "| 2024-11|Total - Gender|   45 to 64 years|v19650588|  1.3.1.22| 7378.8|   2024-11-01|       7378800.0|    9765.7|-2386.9004|\n",
+            "| 2024-11|Total - Gender|45 years and over| v2091076|   1.3.1.5| 8464.7|   2024-11-01|       8464700.0|    7378.8| 1085.9004|\n",
+            "| 2024-11|Total - Gender|   25 to 54 years| v2091077|   1.3.1.6|13882.7|   2024-11-01|       1.38827E7|    8464.7|    5418.0|\n",
+            "| 2024-11|Total - Gender|55 years and over| v2091078|   1.3.1.7| 4347.8|   2024-11-01|       4347800.0|   13882.7|   -9534.9|\n",
+            "| 2024-11|Total - Gender|   15 to 64 years| v2091079|   1.3.1.8|19742.7|   2024-11-01|       1.97427E7|    4347.8| 15394.899|\n",
+            "| 2024-11|Total - Gender|   15 to 19 years| v2091080|   1.3.1.9|  799.5|   2024-11-01|        799500.0|   19742.7|  -18943.2|\n",
+            "| 2024-11|Total - Gender|   20 to 24 years| v2091081|  1.3.1.10| 1798.7|   2024-11-01|       1798700.0|     799.5| 999.19995|\n",
+            "| 2024-11|Total - Gender|   25 to 29 years| v2091082|  1.3.1.11| 2395.4|   2024-11-01|       2395400.0|    1798.7| 596.69995|\n",
+            "| 2024-11|Total - Gender|   30 to 34 years| v2091083|  1.3.1.12| 2589.4|   2024-11-01|       2589400.0|    2395.4|     194.0|\n",
+            "| 2024-11|Total - Gender|   35 to 39 years| v2091084|  1.3.1.13| 2430.2|   2024-11-01|       2430200.0|    2589.4|-159.19995|\n",
+            "| 2024-11|Total - Gender|   40 to 44 years| v2091085|  1.3.1.14| 2350.8|   2024-11-01|       2350800.0|    2430.2|  -79.3999|\n",
+            "| 2024-11|Total - Gender|   45 to 49 years| v2091086|  1.3.1.15| 2072.1|   2024-11-01|       2072100.1|    2350.8|-278.69995|\n",
+            "| 2024-11|Total - Gender|   50 to 54 years| v2091087|  1.3.1.16| 2044.9|   2024-11-01|       2044900.0|    2072.1|-27.200073|\n",
+            "| 2024-11|Total - Gender|   55 to 59 years| v2091088|  1.3.1.17| 1787.1|   2024-11-01|       1787100.0|    2044.9|-257.80005|\n",
+            "| 2024-11|Total - Gender|   60 to 64 years| v2091089|  1.3.1.18| 1474.8|   2024-11-01|       1474800.0|    1787.1|-312.29993|\n",
+            "| 2024-11|Total - Gender|65 years and over| v2091090|  1.3.1.19| 1085.9|   2024-11-01|       1085900.0|    1474.8|-388.90002|\n",
+            "+--------+--------------+-----------------+---------+----------+-------+-------------+----------------+----------+----------+\n",
+            "only showing top 20 rows\n",
+            "\n"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "language_info": {
+      "name": "python"
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
