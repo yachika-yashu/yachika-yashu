@@ -14,15 +14,3 @@ PySpark is the Python interface for Apache Spark. It allows users to write Pytho
 2. Real-time Data: Unlike Hadoop's batch processing, PySpark can handle real-time data collection.
 3. Community Support: Spark has better community support and reliability compared to Apache Flink.
 4. Fault Tolerance: PySpark can recover from failures and supports in-memory computation, running even without a hard drive or SSD.
-
-We are going to perform ETL (Extract Load Transform) on [this]([url](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410001701)) dataset taken from statistics canada. 
-**Overview of the Dataset**
-The dataset contains employment statistics for Canada, segmented by various age groups and gender. Here are the key columns in the dataset:
-
-REF_DATE: The reference date for the data (e.g., "2024-11").
-GEO: The geographical area, which is "Canada" in this dataset.
-Labour force characteristics: This column indicates the type of labour force data, which is "Employment" in this case.
-Gender: The gender category, including "Total - Gender", "Men+", and "Women+".
-Age group: The age group of the individuals (e.g., "15 years and over", "15 to 24 years").
-UOM: Unit of measure, which is "Persons in thousands."
-VALUE: The actual employment numbers.
