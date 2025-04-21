@@ -11,6 +11,26 @@
       ]
     },
     {
+      "cell_type": "markdown",
+      "source": [
+        "[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yachika-yashu/yachika-yashu/blob/main/EDA%20using%20PySpark/Stats_Canada_Employment_EDA)\n"
+      ],
+      "metadata": {
+        "id": "jhAaThAGfwl4"
+      },
+      "id": "jhAaThAGfwl4"
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "39K74XkJfwC0"
+      },
+      "id": "39K74XkJfwC0",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
       "cell_type": "code",
       "source": [
         "import pyspark\n",
