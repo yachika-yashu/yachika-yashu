@@ -116,20 +116,6 @@ weighted avg       0.77      0.77      0.77      2075
 
 ---
 
-## 📓 Notebook Structure
-
-The notebook follows a clear experimental flow:
-
-1. Data loading and filtering
-2. Text cleaning and normalization
-3. Train–test split
-4. Feature extraction (Bag of Words)
-5. Model training (XGBoost)
-6. Model evaluation
-
-Each step is designed to be readable, debuggable, and extensible.
-
----
 
 ## 🚀 How to Run
 
@@ -161,14 +147,4 @@ This project demonstrates:
 * Clean notebook organization suitable for experimentation
 
 ---
-
-### Final recruiter subtext (important)
-
-This README quietly signals that you:
-
-* understand **why** each step exists,
-* evaluate models responsibly,
-* and treat ML as an iterative scientific process.
-
-That subtext is exactly what turns a notebook into a **portfolio artifact**, not just a school exercise.
 
