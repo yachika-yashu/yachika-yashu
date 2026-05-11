@@ -1,29 +1,53 @@
-# Welcome to My Data Science & Analytics Portfolio 🚀
-Hi, I’m Yachika! I approach data with precision, curiosity, and a problem-solving mindset. Each project in this repository reflects my ability to break down complex datasets, extract meaningful insights, and present them with clarity.
+# Welcome to My AI, Data Science & Analytics Portfolio 🚀
 
-🔍 What You’ll Find Here
-Well-structured, clearly documented projects showcasing data cleaning, ETL, analysis, and visualization.
-Practical applications of machine learning and AI, with a focus on solving real-world challenges.
-A commitment to continuous learning—I’m always exploring new tools, techniques, and methodologies.
+Hi, I’m Yachika — an AI Engineer, Data Scientist, and Analytics Professional passionate about building intelligent systems, scalable data solutions, and impactful analytics applications.
 
-## 🛠️ Skills & Tools  
+I enjoy transforming raw data into actionable insights through machine learning, data engineering, AI systems, and interactive visualizations. My work focuses on combining analytical thinking with production-ready engineering to solve real-world business problems.
 
-| Category                    | Tools & Technologies                                                                                                         |
-|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| **🖥️ Programming & Analytics** | ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white) ![D3.js](https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white) ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge) ![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge) ![PySpark](https://img.shields.io/badge/PySpark-E97627?style=for-the-badge) |
-|**📊 Data Visualization & BI** | ![Tableau](https://img.shields.io/badge/Tableau-E97627?style=for-the-badge&logo=Tableau&logoColor=white) ![Power BI](https://img.shields.io/badge/PowerBI-F2C811?style=for-the-badge&logo=powerbi&logoColor=white) ![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge&logo=matplotlib&logoColor=white) ![Seaborn](https://img.shields.io/badge/Seaborn-3182BD?style=for-the-badge) |
-| **🤖 Machine Learning & AI**   | ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)  |
-| **🗄️ Databases**              | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white)  ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge)                                                     |
-| **🌐 Web Development**        | ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![WordPress](https://img.shields.io/badge/WordPress-21759B?style=for-the-badge&logo=wordpress&logoColor=white) ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white) ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white) ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black) |
-| **🔧 Microsoft Suite & Productivity** | ![Excel](https://img.shields.io/badge/Excel-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white) ![PowerPoint](https://img.shields.io/badge/PowerPoint-B7472A?style=for-the-badge&logo=microsoft-powerpoint&logoColor=white) ![Word](https://img.shields.io/badge/Word-2B579A?style=for-the-badge&logo=microsoft-word&logoColor=white) |
-| **🎨 Design & CMS**           | ![Photoshop](https://img.shields.io/badge/Photoshop-31A8FF?style=for-the-badge&logo=adobe-photoshop&logoColor=white) ![Canva](https://img.shields.io/badge/Canva-00C4CC?style=for-the-badge&logo=canva&logoColor=white) ![CMS](https://img.shields.io/badge/CMS-FF6600?style=for-the-badge) |
-| **📈 Web Analytics & SEO**    | ![Google Analytics](https://img.shields.io/badge/Google%20Analytics-E37400?style=for-the-badge&logo=google-analytics&logoColor=white) ![SEO](https://img.shields.io/badge/SEO-008000?style=for-the-badge) |
-| **🔄 Version Control & DevOps** | ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) |
+---
 
+## 🔍 What You’ll Find Here
 
-🧩 My Approach
-I thrive on solving puzzles, finding hidden patterns—whether it’s optimizing a dataset, uncovering hidden trends, or fine-tuning an ML model. My focus and adaptability allow me to quickly grasp new concepts and apply them effectively.
+- End-to-end AI, machine learning, and analytics projects
+- Scalable ETL pipelines and data engineering workflows
+- RAG-based AI applications and intelligent automation systems
+- Interactive dashboards, business intelligence, and storytelling
+- Production-ready APIs, deployment pipelines, and cloud integrations
+- Research-driven experimentation and practical problem-solving
 
-This space is a reflection of my passion for data, learning, and innovation. Let’s dive in! 🚀
+---
 
+# 🛠️ Core Skills & Technologies
+
+| Category | Tools & Technologies |
+|----------|----------------------|
+| **🖥️ Programming & Data Science** | ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white) ![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white) ![PySpark](https://img.shields.io/badge/PySpark-E97627?style=for-the-badge&logo=apachespark&logoColor=white) ![SAS](https://img.shields.io/badge/SAS-1E90FF?style=for-the-badge) |
+| **🤖 AI / Machine Learning** | ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white) ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white) ![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white) ![XGBoost](https://img.shields.io/badge/XGBoost-AA0000?style=for-the-badge) ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge) ![LangChain](https://img.shields.io/badge/LangChain-000000?style=for-the-badge) ![RAG](https://img.shields.io/badge/RAG-4B0082?style=for-the-badge) |
+| **🧠 LLMOps & AI Engineering** | ![LangGraph](https://img.shields.io/badge/LangGraph-121212?style=for-the-badge) ![LangSmith](https://img.shields.io/badge/LangSmith-1F2937?style=for-the-badge) ![Qdrant](https://img.shields.io/badge/Qdrant-DC2626?style=for-the-badge) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) ![MLflow](https://img.shields.io/badge/MLflow-0194E2?style=for-the-badge) ![DVC](https://img.shields.io/badge/DVC-13ADC7?style=for-the-badge) |
+| **⚙️ Data Engineering & Pipelines** | ![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white) ![Kafka](https://img.shields.io/badge/Kafka-000000?style=for-the-badge&logo=apachekafka&logoColor=white) ![Airflow](https://img.shields.io/badge/Airflow-017CEE?style=for-the-badge&logo=apacheairflow&logoColor=white) ![dbt](https://img.shields.io/badge/dbt-FF694B?style=for-the-badge&logo=dbt&logoColor=white) ![Delta Lake](https://img.shields.io/badge/Delta%20Lake-0A84FF?style=for-the-badge) |
+| **📊 Analytics & Visualization** | ![Power BI](https://img.shields.io/badge/PowerBI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black) ![Tableau](https://img.shields.io/badge/Tableau-E97627?style=for-the-badge&logo=tableau&logoColor=white) ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white) ![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge) ![Seaborn](https://img.shields.io/badge/Seaborn-3182BD?style=for-the-badge) ![D3.js](https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white) |
+| **☁️ Cloud & Infrastructure** | ![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) |
+| **🗄️ Databases & Storage** | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![SQL Server](https://img.shields.io/badge/MSSQL-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white) |
+| **🔄 DevOps & Version Control** | ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![CI/CD](https://img.shields.io/badge/CI%2FCD-0A0A0A?style=for-the-badge) ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black) |
+
+---
+
+# 🚀 Areas of Focus
+
+- AI Agents & RAG Systems  
+- Machine Learning & Predictive Analytics  
+- Data Engineering & ETL Pipelines  
+- NLP & Intelligent Document Processing  
+- Business Intelligence & Data Visualization  
+- MLOps & Production AI Systems  
+- Cloud Deployment & Scalable Infrastructure  
+- Statistical Analysis & Experimental Design  
+
+---
+
+# 🧩 My Approach
+
+I enjoy solving complex problems by combining data, engineering, and AI into scalable real-world systems. Whether it’s building ML pipelines, designing intelligent retrieval systems, engineering APIs, or uncovering insights through analytics, I focus on creating solutions that are practical, efficient, and impactful.
+
+This portfolio reflects my passion for continuous learning, experimentation, and building production-ready AI and data systems. 🚀
 
