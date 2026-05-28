@@ -1,53 +1,83 @@
-# Welcome to My AI, Data Science & Analytics Portfolio 🚀
+# Yachika Anand — AI Engineer | GenAI, RAG & Data Platforms
 
-Hi, I’m Yachika — an AI Engineer, Data Scientist, and Analytics Professional passionate about building intelligent systems, scalable data solutions, and impactful analytics applications.
+I build **production GenAI, RAG systems, and governed data platforms** that can be evaluated, deployed, and trusted.
 
-I enjoy transforming raw data into actionable insights through machine learning, data engineering, AI systems, and interactive visualizations. My work focuses on combining analytical thinking with production-ready engineering to solve real-world business problems.
+My background spans clinical research, web development, data analytics, teaching, and AI engineering. That combination shapes how I build: with rigor from research, clarity from teaching, and reliability from engineering. I don't treat AI as magic — I treat it as engineering: **data → system → decision → impact**.
 
----
-
-## 🔍 What You’ll Find Here
-
-- End-to-end AI, machine learning, and analytics projects
-- Scalable ETL pipelines and data engineering workflows
-- RAG-based AI applications and intelligent automation systems
-- Interactive dashboards, business intelligence, and storytelling
-- Production-ready APIs, deployment pipelines, and cloud integrations
-- Research-driven experimentation and practical problem-solving
+[![Portfolio](https://img.shields.io/badge/Portfolio-yachika--yashu.github.io-f58506?style=for-the-badge)](https://yachika-yashu.github.io)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-yachikanand-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yachikanand/)
+[![Medium](https://img.shields.io/badge/Medium-@yachikanand-000000?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@yachikanand)
+[![Substack](https://img.shields.io/badge/Substack-@yachikaanand-f58506?style=for-the-badge)](https://substack.com/@yachikaanand)
+[![Email](https://img.shields.io/badge/Email-yachikanand@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:yachikanand@gmail.com)
 
 ---
 
-# 🛠️ Core Skills & Technologies
+## 🚀 Projects
+
+**GenAI & RAG Systems**
+
+| Project | What it does | Stack |
+|---------|-------------|-------|
+| **[MedVault-RAG](https://yachika-yashu.github.io/projects/MedVault-RAG/)** | Healthcare agentic RAG platform — hybrid search, citations, PubMed ingestion, streaming UI, tenant isolation | LangGraph · Qdrant · FastAPI |
+| **[ResearchHub](https://yachika-yashu.github.io/projects/research-hub/)** | Self-hosted AI research assistant — paper chat, literature reviews, BibTeX export, Arxiv monitoring | RAG · Redis · PostgreSQL · Docker |
+| **[AI Benchmarking Toolkit](https://yachika-yashu.github.io/projects/production-ai-performance-benchmarking-toolkit/)** | Evaluation framework for production AI — latency, RAG quality, retrieval, cost, regression testing | RAGAS · LangSmith · MLflow |
+
+**MLOps & Machine Learning**
+
+| Project | What it does | Stack |
+|---------|-------------|-------|
+| **[Emotion Detection MLOps Pipeline](https://yachika-yashu.github.io/projects/emotion-detection-mlops/)** | Reproducible ML pipeline for tweet emotion classification — DVC-versioned stages, Cookiecutter structure, params-driven hyperparameter control | DVC · MLflow · Scikit-learn · Python |
+| **[LitLens — Book Recommender](https://yachika-yashu.github.io/projects/book-recommender-system/)** | Production-grade recommendation engine over 1M+ ratings — popularity-based discovery + collaborative filtering, deployed with FastAPI and glassmorphism UI | FastAPI · Scikit-learn · Pandas · NumPy |
+| **[Purchase Orders Risk Classification](https://yachika-yashu.github.io/projects/online-purchase-orders-classification/)** | Default-payment risk prediction on 30k orders across 44 features — supervised classification for high-risk customer identification | Scikit-learn · XGBoost · Python |
+
+**Data Engineering & Platforms**
+
+| Project | What it does | Stack |
+|---------|-------------|-------|
+| **[Databricks Retail Lakehouse](https://yachika-yashu.github.io/projects/databricks-retail-lakehouse/)** | End-to-end medallion architecture for global retail analytics — Bronze/Silver/Gold layers, 72h → 6h processing time, Power BI-ready reporting | Databricks · Spark · Delta Lake · PySpark · Power BI |
+| **[ClinETL Pipeline](https://yachika-yashu.github.io/projects/clinetl-pipeline/)** | Real-time clinical trial monitoring ETL across 500+ patients and 10 hospital sites — streaming ingestion, adverse event prediction, audit logging, governance | Kafka · Spark Streaming · Delta Lake · PostgreSQL |
+
+**Product Analytics**
+
+| Project | What it does | Stack |
+|---------|-------------|-------|
+| **[Cybersecurity Product Experimentation](https://yachika-yashu.github.io/projects/cybersecurity-product-experimentation/)** | End-to-end product analytics for a cybersecurity SaaS — funnel analysis, A/B testing, causal inference, churn modeling, stakeholder reporting | Python · A/B Testing · Causal Inference · Churn Modeling |
+
+
+---
+
+## 🛠️ Core Skills & Technologies
 
 | Category | Tools & Technologies |
 |----------|----------------------|
-| **🖥️ Programming & Data Science** | ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white) ![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white) ![PySpark](https://img.shields.io/badge/PySpark-E97627?style=for-the-badge&logo=apachespark&logoColor=white) ![SAS](https://img.shields.io/badge/SAS-1E90FF?style=for-the-badge) |
-| **🤖 AI / Machine Learning** | ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white) ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white) ![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white) ![XGBoost](https://img.shields.io/badge/XGBoost-AA0000?style=for-the-badge) ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge) ![LangChain](https://img.shields.io/badge/LangChain-000000?style=for-the-badge) ![RAG](https://img.shields.io/badge/RAG-4B0082?style=for-the-badge) |
-| **🧠 LLMOps & AI Engineering** | ![LangGraph](https://img.shields.io/badge/LangGraph-121212?style=for-the-badge) ![LangSmith](https://img.shields.io/badge/LangSmith-1F2937?style=for-the-badge) ![Qdrant](https://img.shields.io/badge/Qdrant-DC2626?style=for-the-badge) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) ![MLflow](https://img.shields.io/badge/MLflow-0194E2?style=for-the-badge) ![DVC](https://img.shields.io/badge/DVC-13ADC7?style=for-the-badge) |
-| **⚙️ Data Engineering & Pipelines** | ![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white) ![Kafka](https://img.shields.io/badge/Kafka-000000?style=for-the-badge&logo=apachekafka&logoColor=white) ![Airflow](https://img.shields.io/badge/Airflow-017CEE?style=for-the-badge&logo=apacheairflow&logoColor=white) ![dbt](https://img.shields.io/badge/dbt-FF694B?style=for-the-badge&logo=dbt&logoColor=white) ![Delta Lake](https://img.shields.io/badge/Delta%20Lake-0A84FF?style=for-the-badge) |
-| **📊 Analytics & Visualization** | ![Power BI](https://img.shields.io/badge/PowerBI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black) ![Tableau](https://img.shields.io/badge/Tableau-E97627?style=for-the-badge&logo=tableau&logoColor=white) ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white) ![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge) ![Seaborn](https://img.shields.io/badge/Seaborn-3182BD?style=for-the-badge) ![D3.js](https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white) |
-| **☁️ Cloud & Infrastructure** | ![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) |
-| **🗄️ Databases & Storage** | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![SQL Server](https://img.shields.io/badge/MSSQL-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white) |
-| **🔄 DevOps & Version Control** | ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![CI/CD](https://img.shields.io/badge/CI%2FCD-0A0A0A?style=for-the-badge) ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black) |
+| **Programming & Data** | ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![PySpark](https://img.shields.io/badge/PySpark-E97627?style=for-the-badge&logo=apachespark&logoColor=white) |
+| **AI / GenAI Engineering** | ![LangGraph](https://img.shields.io/badge/LangGraph-121212?style=for-the-badge) ![LangChain](https://img.shields.io/badge/LangChain-000000?style=for-the-badge) ![LangSmith](https://img.shields.io/badge/LangSmith-1F2937?style=for-the-badge) ![Qdrant](https://img.shields.io/badge/Qdrant-DC2626?style=for-the-badge) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white) |
+| **ML & MLOps** | ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white) ![MLflow](https://img.shields.io/badge/MLflow-0194E2?style=for-the-badge) ![DVC](https://img.shields.io/badge/DVC-13ADC7?style=for-the-badge) ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge) |
+| **Data Engineering** | ![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white) ![Airflow](https://img.shields.io/badge/Airflow-017CEE?style=for-the-badge&logo=apacheairflow&logoColor=white) ![dbt](https://img.shields.io/badge/dbt-FF694B?style=for-the-badge&logo=dbt&logoColor=white) ![Delta Lake](https://img.shields.io/badge/Delta%20Lake-0A84FF?style=for-the-badge) ![Kafka](https://img.shields.io/badge/Kafka-000000?style=for-the-badge&logo=apachekafka&logoColor=white) |
+| **Cloud & Platforms** | ![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white) ![Databricks](https://img.shields.io/badge/Databricks-E97627?style=for-the-badge&logo=databricks&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white) |
+| **Analytics & BI** | ![Power BI](https://img.shields.io/badge/PowerBI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black) ![Tableau](https://img.shields.io/badge/Tableau-E97627?style=for-the-badge&logo=tableau&logoColor=white) ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white) |
+| **Databases** | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) |
 
 ---
 
-# 🚀 Areas of Focus
+## ✍️ Writing
 
-- AI Agents & RAG Systems  
-- Machine Learning & Predictive Analytics  
-- Data Engineering & ETL Pipelines  
-- NLP & Intelligent Document Processing  
-- Business Intelligence & Data Visualization  
-- MLOps & Production AI Systems  
-- Cloud Deployment & Scalable Infrastructure  
-- Statistical Analysis & Experimental Design  
+I write about production AI engineering, RAG design, data pipelines, and lessons from building real systems.
+
+- **[Medium](https://medium.com/@yachikanand)** — Deep dives: RAG patterns, LLM engineering, MLOps, data pipelines
+- **[Substack](https://substack.com/@yachikaanand)** — Practical insights: AI systems, career transitions, consistency over intensity
 
 ---
 
-# 🧩 My Approach
+## 💡 How I Work
 
-I enjoy solving complex problems by combining data, engineering, and AI into scalable real-world systems. Whether it’s building ML pipelines, designing intelligent retrieval systems, engineering APIs, or uncovering insights through analytics, I focus on creating solutions that are practical, efficient, and impactful.
+From **clinical research** I learned rigor — results must be reproducible, not guessed.  
+From **data analytics** I learned context — insights only matter if they solve real problems.  
+From **engineering** I learned reliability — if it doesn't scale or monitor, it's incomplete.  
+From **teaching** I learned clarity — if I can't explain it simply, I don't understand it well enough.
 
-This portfolio reflects my passion for continuous learning, experimentation, and building production-ready AI and data systems. 🚀
+I focus on one question with every system I build: **Can this survive in production and be trusted?**
 
+---
+
+*Open to roles in AI engineering, GenAI/RAG systems, and data platform work. [Let's connect.](https://www.linkedin.com/in/yachikanand/)*
