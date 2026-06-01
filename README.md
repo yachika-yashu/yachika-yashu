@@ -12,37 +12,6 @@ My background spans clinical research, web development, data analytics, teaching
 
 ---
 
-## 🚀 Projects
-
-**GenAI & RAG Systems**
-
-| Project | What it does | Stack |
-|---------|-------------|-------|
-| **[MedVault-RAG](https://yachika-yashu.github.io/projects/MedVault-RAG/)** | Healthcare agentic RAG platform — hybrid search, citations, PubMed ingestion, streaming UI, tenant isolation | LangGraph · Qdrant · FastAPI |
-| **[ResearchHub](https://yachika-yashu.github.io/projects/research-hub/)** | Self-hosted AI research assistant — paper chat, literature reviews, BibTeX export, Arxiv monitoring | RAG · Redis · PostgreSQL · Docker |
-| **[AI Benchmarking Toolkit](https://yachika-yashu.github.io/projects/production-ai-performance-benchmarking-toolkit/)** | Evaluation framework for production AI — latency, RAG quality, retrieval, cost, regression testing | RAGAS · LangSmith · MLflow |
-
-**MLOps & Machine Learning**
-
-| Project | What it does | Stack |
-|---------|-------------|-------|
-| **[Emotion Detection MLOps Pipeline](https://yachika-yashu.github.io/projects/emotion-detection-mlops/)** | Reproducible ML pipeline for tweet emotion classification — DVC-versioned stages, Cookiecutter structure, params-driven hyperparameter control | DVC · MLflow · Scikit-learn · Python |
-| **[LitLens — Book Recommender](https://yachika-yashu.github.io/projects/book-recommender-system/)** | Production-grade recommendation engine over 1M+ ratings — popularity-based discovery + collaborative filtering, deployed with FastAPI and glassmorphism UI | FastAPI · Scikit-learn · Pandas · NumPy |
-| **[Purchase Orders Risk Classification](https://yachika-yashu.github.io/projects/online-purchase-orders-classification/)** | Default-payment risk prediction on 30k orders across 44 features — supervised classification for high-risk customer identification | Scikit-learn · XGBoost · Python |
-
-**Data Engineering & Platforms**
-
-| Project | What it does | Stack |
-|---------|-------------|-------|
-| **[Databricks Retail Lakehouse](https://yachika-yashu.github.io/projects/databricks-retail-lakehouse/)** | End-to-end medallion architecture for global retail analytics — Bronze/Silver/Gold layers, 72h → 6h processing time, Power BI-ready reporting | Databricks · Spark · Delta Lake · PySpark · Power BI |
-| **[ClinETL Pipeline](https://yachika-yashu.github.io/projects/clinetl-pipeline/)** | Real-time clinical trial monitoring ETL across 500+ patients and 10 hospital sites — streaming ingestion, adverse event prediction, audit logging, governance | Kafka · Spark Streaming · Delta Lake · PostgreSQL |
-
-**Product Analytics**
-
-| Project | What it does | Stack |
-|---------|-------------|-------|
-| **[Cybersecurity Product Experimentation](https://yachika-yashu.github.io/projects/cybersecurity-product-experimentation/)** | End-to-end product analytics for a cybersecurity SaaS — funnel analysis, A/B testing, causal inference, churn modeling, stakeholder reporting | Python · A/B Testing · Causal Inference · Churn Modeling |
-
 
 ---
 
@@ -73,7 +42,7 @@ I write about production AI engineering, RAG design, data pipelines, and lessons
 
 From **clinical research** I learned rigor — results must be reproducible, not guessed.  
 From **data analytics** I learned context — insights only matter if they solve real problems.  
-From **engineering** I learned reliability — if it doesn't scale or monitor, it's incomplete.  
+From **Software Engineering** I learned reliability — if it doesn't scale or monitor, it's incomplete.  
 From **teaching** I learned clarity — if I can't explain it simply, I don't understand it well enough.
 
 I focus on one question with every system I build: **Can this survive in production and be trusted?**
