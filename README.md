@@ -2,7 +2,7 @@
 
 I build **production GenAI, RAG systems, and governed data platforms** that can be evaluated, deployed, and trusted.
 
-My background spans clinical research, web development, data analytics, teaching, and AI engineering. That combination shapes how I build: with rigor from research, clarity from teaching, and reliability from engineering. I don't treat AI as magic — I treat it as engineering: **data → system → decision → impact**.
+My background spans AI engineering, Software Engineering, Research, Data analytics, Teaching, and UI/UX designing. That combination shapes how I build: with rigor from research, clarity from teaching, and reliability from engineering. I don't treat AI as magic — I treat it as engineering: **data → system → decision → impact**.
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-yachika--yashu.github.io-f58506?style=for-the-badge)](https://yachika-yashu.github.io)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-yachikanand-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yachikanand/)
